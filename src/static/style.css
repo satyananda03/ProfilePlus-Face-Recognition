@@ -1,0 +1,77 @@
+/* Reset Margin agar full screen */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #000; /* Background hitam biar sinematik */
+    overflow: hidden; /* Hilangkan scrollbar */
+    font-family: sans-serif;
+}
+
+/* Container Video Full Screen */
+#liveView {
+    position: fixed; /* Mengunci posisi ke layar */
+    top: 0;
+    left: 0;
+    width: 100vw; /* 100% Viewport Width */
+    height: 100vh; /* 100% Viewport Height */
+    z-index: 1;
+}
+
+video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* PENTING: Agar video full tanpa gepeng (crop otomatis) */
+    transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg);
+    -moz-transform: rotateY(180deg);
+}
+
+/* Tombol Melayang di Bawah */
+#buttonContainer {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20; /* Di atas video */
+}
+
+/* --- LOADING OVERLAY --- */
+#loadingOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85); /* Hitam transparan */
+    z-index: 100; /* Paling atas */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+/* @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+} */
+
+/* Kotak Deteksi Wajah (Highlighter) */
+.highlighter {
+    border: 1px solid rgb(166, 255, 0);
+    position: absolute;
+    z-index: 10;
+}
+
+.info {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    color: rgb(166, 255, 0);
+    font-size: 14px; /* Font agak diperbesar */
+    font-weight: bold;
+    padding: 4px 8px;
+    z-index: 11;
+    transform: translateY(-100%);
+}
