@@ -4,26 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test Face Detection</title>
-    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
 </head>
 <body>
-
     <div id="loadingOverlay">
-        <!-- <div class="spinner"></div> -->
-        <p style="font-size: 30px;">Sedang memuat Model</p>
+        <p style="font-size: 30px;">Sedang memuat model...</p>
     </div>
 
     <div id="buttonContainer">
-        <button id="webcamButton" disabled></button>
+        <button id="webcamButton" style="display: none;"></button>
     </div>
 
     <div id="liveView">
-        <video id="webcam" autoplay playsinline></video>
+        <video id="webcam" autoplay playsinline muted></video>
     </div>
     
     <input type="hidden" id="redirectUrl" value="{{ redirect_url }}">
     <input type="hidden" id="userId" value="{{ user_id }}">
     
-    <script type="module" src="{{ url_for('static', path='script.js') }}"></script>
+    <script type="module" src="{{ url_for('static', path='js/script.js') }}?v=1.1"></script>
 </body>
 </html>
