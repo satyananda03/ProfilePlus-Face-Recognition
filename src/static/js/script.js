@@ -6,7 +6,7 @@ const CONFIG = {
     LIGHTING_SAMPLE_SIZE: 50,   
     BRIGHTNESS_LOW: 25,         
     BRIGHTNESS_HIGH: 200,      
-    // Head Pose
+    // Arah Hadap Kepala
     PITCH_DOWN_THRESHOLD: 0.65,
     PITCH_UP_THRESHOLD: 0.32,
     YAW_RIGHT_THRESHOLD: 0.35,
@@ -51,9 +51,7 @@ const initializeFaceLandmarker = async () => {
 };
 
 function updateUIReady() {
-    // Hilangkan loading overlay
     loadingOverlay.style.display = "none";    
-    // Sembunyikan button
     enableWebcamButton.style.display = "none"; 
     console.log("Model siap, mencoba menyalakan kamera otomatis");
     enableCam(); 
@@ -72,7 +70,6 @@ async function enableCam() {
         console.log("Model belum siap");
         return;
     }
-    // Disable sementara saat loading
     enableWebcamButton.disabled = true;
     try {
         const constraints = {
@@ -86,21 +83,15 @@ async function enableCam() {
         video.srcObject = stream;
         video.addEventListener("loadedmetadata", () => {
             video.play();
-            // --- LOGIKA BARU UNTUK TOMBOL CAPTURE ---
-            // 1. Munculkan kembali tombol
+            // LOGIC TOMBOL CAPTURE
             enableWebcamButton.style.display = "block";
-            // 2. Ubah Teks & Style
             enableWebcamButton.innerText = "CAPTURE";
-            // 3. Reset Event Listener (Hapus event lama, tambah event capture)
-            // Clone node adalah cara cepat menghapus semua event listener lama (agar tidak double klik)
+            // Reset Event Listener
             let newButton = enableWebcamButton.cloneNode(true);
             enableWebcamButton.parentNode.replaceChild(newButton, enableWebcamButton);
-            enableWebcamButton = newButton; // Update referensi variabel
-            // 4. Tambahkan fungsi capture
+            enableWebcamButton = newButton;
             enableWebcamButton.addEventListener("click", captureImage);
-            // 5. Default state: Disabled (tunggu sampai wajah terdeteksi OK)
             enableWebcamButton.disabled = true; 
-            // Mulai loop deteksi
             predictWebcam(); 
         });
     } catch (err) {
@@ -110,13 +101,11 @@ async function enableCam() {
 }
 
 async function predictWebcam() {
-    // Cek apakah video sedang pause atau berakhir, jika ya, hentikan deteksi sementara
     if (video.paused || video.ended) {
         window.requestAnimationFrame(predictWebcam);
         return;
     }
     let startTimeMs = performance.now();
-    // Deteksi hanya jika frame video berubah (waktu video berjalan)
     if (video.currentTime !== lastVideoTime) {
         lastVideoTime = video.currentTime;
         // Deteksi wajah
@@ -124,7 +113,7 @@ async function predictWebcam() {
         // Render & Validasi
         displayResults(results);
     }
-    // Loop terus menerus
+    // Looping
     window.requestAnimationFrame(predictWebcam);
 }
 
@@ -134,11 +123,11 @@ function getHeadPose(landmarks) {
     const leftEye = landmarks[263];
     const rightEye = landmarks[33];
     const mouth = landmarks[13];
-    // --- YAW ---
+    // YAW 
     const distToLeftEye = Math.abs(nose.x - leftEye.x);
     const distToRightEye = Math.abs(nose.x - rightEye.x);
     const yawRatio = distToRightEye / (distToLeftEye + distToRightEye);
-    // --- PITCH (Menggunakan Mata & Mulut) ---
+    // PITCH (Menggunakan Mata & Mulut)
     // Cari titik tengah di antara dua mata (secara Y)
     const midEyeY = (leftEye.y + rightEye.y) / 2;
     // Jarak Hidung ke Garis Mata
